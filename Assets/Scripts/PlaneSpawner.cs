@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class PlaneSpawner : MonoBehaviour
     public float spawnDistance = 10f; // How far offscreen to spawn
     private float timer;
 
+    public List<PlaneType> availablePlanes;
 
     void Update()
     {
@@ -40,16 +42,19 @@ public class PlaneSpawner : MonoBehaviour
             Debug.LogError("Spawned plane has no PlaneController script attached!");
         }
             controller.SetDirection(direction);
-            controller.planeName = GenerateRandomPlaneName();
+            PlaneType planeType = availablePlanes[Random.Range(0, availablePlanes.Count)];
+            controller.SetPlaneType(planeType);
+            // Set the planes sprite to the planeType sprite
+            SpriteRenderer spriteRenderer = plane.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.sprite = planeType.planeSprite;
+            }
+            else
+            {
+                Debug.LogError("Plane prefab does not have a SpriteRenderer component!");
+            }
         }
-
-    private string GenerateRandomPlaneName()
-    {
-        string[] names = { "Airbus", "Boeing", "Cessna", "Fokker", "Gulfstream", "Hawker", "Learjet", "Piper", "Sukhoi", "Tupolev" };
-        string name = names[Random.Range(0, names.Length)] + Random.Range(1, 100).ToString();
-        return name;
-    }
-
     void GetSpawnPositionAndDirection(out Vector2 pos, out Vector2 dir)
     {
         Camera cam = Camera.main;
@@ -81,4 +86,7 @@ public class PlaneSpawner : MonoBehaviour
                 break;
             }   
     }
+  
+
+
 }

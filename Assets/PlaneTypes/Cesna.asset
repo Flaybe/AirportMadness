@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a3e0584001051f12874b3c9c1ab6885, type: 3}
+  m_Name: Cesna
+  m_EditorClassIdentifier: 
+  planeName: Cesna
+  callSign: CES718
+  speed: 1
+  minSpeed: 0.5
+  maxSpeed: 2
+  turnSpeed: 50
+  planeSprite: {fileID: -7405616233967572306, guid: e485baf2c5e824ab8a4c2158fa374b26, type: 3}
