@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlaneSpawner : MonoBehaviour
@@ -6,6 +7,7 @@ public class PlaneSpawner : MonoBehaviour
     public float spawnInterval = 5f;
     public float spawnDistance = 10f; // How far offscreen to spawn
     private float timer;
+
 
     void Update()
     {
@@ -38,7 +40,15 @@ public class PlaneSpawner : MonoBehaviour
             Debug.LogError("Spawned plane has no PlaneController script attached!");
         }
             controller.SetDirection(direction);
+            controller.planeName = GenerateRandomPlaneName();
         }
+
+    private string GenerateRandomPlaneName()
+    {
+        string[] names = { "Airbus", "Boeing", "Cessna", "Fokker", "Gulfstream", "Hawker", "Learjet", "Piper", "Sukhoi", "Tupolev" };
+        string name = names[Random.Range(0, names.Length)] + Random.Range(1, 100).ToString();
+        return name;
+    }
 
     void GetSpawnPositionAndDirection(out Vector2 pos, out Vector2 dir)
     {

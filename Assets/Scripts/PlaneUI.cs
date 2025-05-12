@@ -1,0 +1,53 @@
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PlaneUI : MonoBehaviour
+{
+    public static PlaneUI Instance;
+
+    public GameObject panel;
+    public TMP_Text planeNameText;
+    private GameObject currentPlane;
+
+    private Camera cam;
+
+    void Awake()
+    {
+        Instance = this;
+        panel.SetActive(false);
+        cam = Camera.main;
+    }
+
+    public void ShowFor(GameObject plane)
+    {
+     
+        currentPlane = plane;
+        planeNameText.text = plane.GetComponent<PlaneController>().planeName;
+        panel.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        panel.SetActive(false);
+        currentPlane = null;
+    }
+
+    void LateUpdate()
+    {
+        if (currentPlane == null) return;
+
+        // Convert world position to screen position
+        Vector3 screenPos = cam.WorldToScreenPoint(currentPlane.transform.position + new Vector3(0, 0.5f, 0));
+        //  get the radius of the collider for the plane
+        float radius = currentPlane.GetComponent<CircleCollider2D>().radius;
+        // offset the position of the panel by the radius of the collider
+        panel.transform.position = screenPos + new Vector3(radius * cam.aspect * Screen.width / cam.orthographicSize, radius * Screen.height / cam.orthographicSize, 0);
+
+    }
+
+    public bool IsShowing(GameObject plane)
+    {
+        return panel.activeSelf && currentPlane == plane;
+    }
+}

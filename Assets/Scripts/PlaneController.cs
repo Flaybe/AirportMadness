@@ -5,6 +5,7 @@ public class PlaneController : MonoBehaviour
 {
     public float speed = 2f;
     private Vector2 moveDirection;
+    public string planeName = "Plane";
 
     public void SetDirection(Vector2 dir)
     {
