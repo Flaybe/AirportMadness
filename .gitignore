@@ -1,0 +1,70 @@
+
+# =============== #
+# Unity Generated #
+# =============== #
+
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+
+# User-specific
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+.vscode/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Unity cache
+*.apk
+*.aab
+*.unitypackage
+
+# ========== #
+# OS/Editor  #
+# ========== #
+
+.DS_Store
+Thumbs.db
+
+# ================== #
+# Version Control    #
+# ================== #
+
+# Uncomment this if you're using Git LFS
+# *.psd
+# *.png
+# *.jpg
+# *.fbx
+# *.anim
+# *.controller
+# *.mp3
+# *.wav
+
+# ========== #
+# Others     #
+# ========== #
+
+/Assets/Plugins/Editor/JetBrains*
+
+# Optional: ignore crash dumps and memory snapshots
+*.dmp
+*.stacktrace
+*.memsnap
