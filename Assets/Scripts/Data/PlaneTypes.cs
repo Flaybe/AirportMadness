@@ -13,6 +13,8 @@ public class PlaneType : ScriptableObject
 
     public Sprite planeSprite;
 
+    public Texture2D cursorSprite;
+
 #if UNITY_EDITOR
     private void OnEnable()
     {

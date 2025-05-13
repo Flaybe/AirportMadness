@@ -11,6 +11,10 @@ public class PlaneUI : MonoBehaviour
     public TMP_Text planeNameText;
     private GameObject currentPlane;
 
+    public Button waypointButton;
+    public Button speedUpButton;
+    public Button slowDownButton;
+
     private Camera cam;
 
     void Awake()
@@ -19,6 +23,31 @@ public class PlaneUI : MonoBehaviour
         panel.SetActive(false);
         cam = Camera.main;
     }
+    void Update()
+    {
+        if (currentPlane == null) return;
+        if(Input.GetKeyDown(KeyCode.W))
+        {
+            if (waypointButton != null)
+            {
+                waypointButton.onClick.Invoke();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            if (speedUpButton != null)
+            {
+                speedUpButton.onClick.Invoke();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            if (slowDownButton != null)
+            {
+                slowDownButton.onClick.Invoke();
+            }
+        }
+    } 
 
     public void ShowFor(GameObject plane)
     {

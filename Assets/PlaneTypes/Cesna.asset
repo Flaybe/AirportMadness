@@ -19,3 +19,4 @@ MonoBehaviour:
   maxSpeed: 2
   turnSpeed: 50
   planeSprite: {fileID: -7405616233967572306, guid: e485baf2c5e824ab8a4c2158fa374b26, type: 3}
+  cursorSprite: {fileID: 2800000, guid: 6c57fdef3847ccc5892babf35d060251, type: 3}

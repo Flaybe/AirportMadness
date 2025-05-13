@@ -2158,7 +2158,6 @@ MonoBehaviour:
   availablePlanes:
   - {fileID: 11400000, guid: 9c4036545f9cff88a991d16a08061dfd, type: 2}
   - {fileID: 11400000, guid: edeffbede33eb2beb9981067bc6c2c6e, type: 2}
-  - {fileID: 11400000, guid: edeffbede33eb2beb9981067bc6c2c6e, type: 2}
 --- !u!114 &1856655813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2173,6 +2172,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panel: {fileID: 1263882376}
   planeNameText: {fileID: 196431431}
+  waypointButton: {fileID: 494352873}
+  speedUpButton: {fileID: 14159638}
+  slowDownButton: {fileID: 957385711}
 --- !u!1 &1897892925
 GameObject:
   m_ObjectHideFlags: 0
