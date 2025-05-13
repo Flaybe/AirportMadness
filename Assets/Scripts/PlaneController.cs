@@ -70,7 +70,7 @@ public class PlaneController : MonoBehaviour
                 lineDrawer.ClearLine();
                 targetPosition = Vector2.zero;
             }else{
-                var path = PredictPath(10f);
+                var path = PredictPath(20f);
                 lineDrawer.DrawPath(path);
             }
         }
@@ -228,6 +228,7 @@ public class PlaneController : MonoBehaviour
             if(Vector2.Distance(planePos, targetPos) < 0.3f){
                 break;
             }
+            if (time > secondsAhead) break;
             path.Add(planePos);
             time += dt;
         }
