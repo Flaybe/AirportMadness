@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 194925732096368867}
   - component: {fileID: -2311111373146038886}
   - component: {fileID: 8598043066244499228}
+  - component: {fileID: 1431737571550089178}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -122,6 +123,8 @@ MonoBehaviour:
   turnSpeed: 0
   callSign: 
   lineDrawer: {fileID: 2121356408708094703}
+  targetPosition: {x: 0, y: 0}
+  RunwayCollider: {fileID: 0}
 --- !u!58 &194925732096368867
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -157,7 +160,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.3
+  m_Radius: 0.4
 --- !u!114 &-2311111373146038886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,7 +197,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c22aae993738af8e0a92881194c8a9bd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -269,7 +272,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 1
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
@@ -277,3 +280,30 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!50 &1431737571550089178
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5149655691888607581}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

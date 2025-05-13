@@ -52,6 +52,8 @@ public class PlaneUI : MonoBehaviour
     public void ShowFor(GameObject plane)
     {
      
+    
+        plane.GetComponent<SpriteRenderer>().color = Color.yellow;
         currentPlane = plane;
         panel.SetActive(true);
         PlaneController controller= plane.GetComponent<PlaneController>();
@@ -60,6 +62,7 @@ public class PlaneUI : MonoBehaviour
 
     public void Hide()
     {
+        currentPlane.GetComponent<SpriteRenderer>().color = Color.white;
         panel.SetActive(false);
         currentPlane = null;
     }

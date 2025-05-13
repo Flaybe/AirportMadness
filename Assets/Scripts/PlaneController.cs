@@ -1,15 +1,17 @@
 
 using System.Collections.Generic;
+using System.Xml;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SocialPlatforms.GameCenter;
+using UnityEngine.UIElements;
+using UnityEngine.WSA;
 
 public class PlaneController : MonoBehaviour
 {
 
     private Vector2 moveDirection;
-
     public Vector2 targetDirection;
     public PlaneType planeType;
     public float speed;
@@ -18,6 +20,8 @@ public class PlaneController : MonoBehaviour
 
     public LineDrawer lineDrawer;
     public Vector2 targetPosition;
+    public BoxCollider2D RunwayCollider;
+
 
     private bool waitingForWaypoint = false;
     public void SetPlaneType(PlaneType type)
@@ -45,6 +49,50 @@ public class PlaneController : MonoBehaviour
 
     void Update()
     {
+        MouseListeners();
+        // Rotate moveDirection toward targetDirection
+        if (targetDirection != Vector2.zero)
+        {
+
+            UpdateTargetDirection(targetPosition);
+            RotateSprite();
+            float radPerTurn= turnSpeed * Mathf.Deg2Rad * Time.deltaTime;
+            Vector2 currentPosition = transform.position;
+            moveDirection = RotateTowards(moveDirection, targetDirection, radPerTurn, ref currentPosition, targetPosition, Time.deltaTime);
+            transform.position = currentPosition;
+
+        }
+        if (targetPosition != Vector2.zero)
+        {
+            // Check if the plane is close to the target position
+            if (Vector2.Distance(transform.position, targetPosition) < 0.3f)
+            {
+                lineDrawer.ClearLine();
+                targetPosition = Vector2.zero;
+            }else{
+                var path = PredictPath(10f);
+                lineDrawer.DrawPath(path);
+            }
+        }
+        // Move forward in current moveDirection
+        // Rotate the sprite to match moveDirection
+    } 
+
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Runway"))
+        {
+            // Plane is on the runway, stop it
+            speed = 0f;
+            targetDirection = Vector2.zero;
+            targetPosition = Vector2.zero;
+            lineDrawer.ClearLine();
+        }
+    }
+
+    void MouseListeners()
+    {
         if (waitingForWaypoint)
         {
             Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -61,43 +109,14 @@ public class PlaneController : MonoBehaviour
                 targetDirection = (Vector2)(clickPos - transform.position).normalized;
                 waitingForWaypoint = false;
                 // Reset cursor to default
-                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+                UnityEngine.Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             }
         }
-        UpdateTargetDirection(targetPosition);
-        // Rotate moveDirection toward targetDirection
-        if (targetDirection != Vector2.zero)
-        {
-            float maxRadians = turnSpeed * Mathf.Deg2Rad * Time.deltaTime;
-            moveDirection = RotateTowards(moveDirection, targetDirection, maxRadians);
-
-        }
-        if (targetPosition != Vector2.zero)
-        {
-            // Check if the plane is close to the target position
-            if (Vector2.Distance(transform.position, targetPosition) < 0.3f)
-            {
-                lineDrawer.ClearLine();
-                targetPosition = Vector2.zero;
-            }else{
-                lineDrawer.DrawLine(transform.position, targetPosition);
-            }
-        }
-        // Move forward in current moveDirection
-        transform.position += (Vector3)(moveDirection * speed * Time.deltaTime);
-
-        // Rotate the sprite to match moveDirection
-        if (moveDirection != Vector2.zero)
-        {
-            float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f); // assumes sprite faces up
-        }
-    } 
-
-    void MovetoDirection(Vector2 direction)
+    }
+    Vector2 MovetoDirection(Vector2 direction, float dt)
     {
         // Move the plane in the specified direction
-        transform.position += (Vector3)(direction * speed * Time.deltaTime);
+        return direction * speed * dt;
     }
 
     void UpdateTargetDirection(Vector2 target)
@@ -130,15 +149,33 @@ public class PlaneController : MonoBehaviour
        string name = planeType.planeName.PadRight(3, '-')[..3].ToUpper() + Random.Range(100, 999).ToString();
        return name;
     } 
-    private Vector2 RotateTowards(Vector2 current, Vector2 target, float maxRadians)
+    
+    private Vector2 RotateTowards(Vector2 currentAngle, Vector2 targetAngle, float maxRadians, ref Vector2 planePos, Vector2 targetPos, float dt)
     {
-        float angle = Vector2.SignedAngle(current, target);
+        float angleToTarget = Vector2.SignedAngle(currentAngle, targetAngle);
+        float timeToTurn = Mathf.Abs(angleToTarget) / turnSpeed;
+        float dinstanceToNeededToTurn = speed * timeToTurn;
 
+        float distanceToTarget = Vector2.Distance(planePos, targetPos);
         // Clamp angle
-        float clampedAngle = Mathf.Clamp(angle, -maxRadians * Mathf.Rad2Deg, maxRadians * Mathf.Rad2Deg);
+        float clampedAngle = Mathf.Clamp(angleToTarget, -maxRadians * Mathf.Rad2Deg, maxRadians * Mathf.Rad2Deg);
+        Vector2 clampedDirection = Quaternion.Euler(0, 0, clampedAngle) * currentAngle;
 
+        //If we can not reach the target angel before due to speed we keep going straight until we are far enough to be able to make the turn
+        if (distanceToTarget < dinstanceToNeededToTurn)
+        {
+            planePos += MovetoDirection(currentAngle, dt);
+            return currentAngle; 
+        }
+        planePos += MovetoDirection(clampedDirection, dt);
         // Apply rotation
-        return Quaternion.Euler(0, 0, clampedAngle) * current;
+        return clampedDirection; 
+    }
+    private void RotateSprite()
+    {
+        // Rotate the sprite to match moveDirection
+        float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
     }
 
 
@@ -167,7 +204,34 @@ public class PlaneController : MonoBehaviour
         waitingForWaypoint = true;
         // change cursor to crosshair
         Vector2 hotspot = new Vector2(15, 15);
-        Cursor.SetCursor(planeType.cursorSprite, hotspot, CursorMode.Auto);
-        Cursor.visible = true;
+        UnityEngine.Cursor.SetCursor(planeType.cursorSprite, hotspot, CursorMode.Auto);
+        UnityEngine.Cursor.visible = true;
     }
+    
+    List<Vector3> PredictPath(float secondsAhead, float dt = 0.01f)
+    {
+        Vector2  dirCurrent = moveDirection;
+        Vector2  dirTarget  = targetDirection;
+        Vector2  planePos = transform.position;
+        Vector2  targetPos = targetPosition;
+
+        float    maxRadPerStep = turnSpeed * Mathf.Deg2Rad * dt;
+
+        List<Vector3> path = new() { planePos };
+        float time = 0f;
+        while (true)
+        {
+
+            dirTarget = (targetPos - (Vector2)planePos).normalized;
+            // samma sväng‑algoritm som i Update, fast på kopierade variabler
+            dirCurrent = RotateTowards(dirCurrent, dirTarget, maxRadPerStep, ref planePos, targetPos, dt);
+            if(Vector2.Distance(planePos, targetPos) < 0.3f){
+                break;
+            }
+            path.Add(planePos);
+            time += dt;
+        }
+        return path;
+}
+
 }
