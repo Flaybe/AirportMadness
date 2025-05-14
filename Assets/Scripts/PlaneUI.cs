@@ -49,6 +49,9 @@ public class PlaneUI : MonoBehaviour
         }
     } 
 
+    public bool isActive(){
+        return panel.activeSelf;
+    }
     public void ShowFor(GameObject plane)
     {
      
@@ -62,6 +65,9 @@ public class PlaneUI : MonoBehaviour
 
     public void Hide()
     {
+        if(currentPlane == null){
+            return;
+        }
         currentPlane.GetComponent<SpriteRenderer>().color = Color.white;
         panel.SetActive(false);
         currentPlane = null;

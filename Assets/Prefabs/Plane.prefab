@@ -119,7 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetDirection: {x: 0, y: 0}
   planeType: {fileID: 11400000, guid: 9c4036545f9cff88a991d16a08061dfd, type: 2}
-  speed: 2
+  speed: 2.01
   turnSpeed: 0
   callSign: 
   lineDrawer: {fileID: 2121356408708094703}

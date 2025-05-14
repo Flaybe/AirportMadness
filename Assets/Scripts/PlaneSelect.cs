@@ -7,8 +7,7 @@ public class PlaneSelect : MonoBehaviour
     void OnMouseDown()
     {
         
-        if(EventSystem.current.IsPointerOverGameObject()){
-            
+        if(EventSystem.current.IsPointerOverGameObject()){ 
             return;
         }
         if(PlaneUI.Instance.IsShowing(gameObject)){
@@ -17,6 +16,7 @@ public class PlaneSelect : MonoBehaviour
         }
         Debug.Log("Plane Clicked " + name);
         // Highlight the plane
+        PlaneUI.Instance.Hide();
         PlaneUI.Instance.ShowFor(gameObject);
     }
 }
